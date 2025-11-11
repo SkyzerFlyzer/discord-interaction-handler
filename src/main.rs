@@ -24,7 +24,6 @@ use aws_config::BehaviorVersion;
 use aws_sdk_lambda::Client as LambdaClient;
 use lambda_http::{run, service_fn, Error};
 use tracing::info;
-use tracing_subscriber;
 
 use crate::handler::handle_request;
 use crate::lambda_invoker::LambdaInvoker;

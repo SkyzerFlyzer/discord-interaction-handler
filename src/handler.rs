@@ -96,7 +96,10 @@ pub async fn handle_request(
         Ok(i) => i,
         Err(e) => {
             error!("Failed to parse interaction: {}", e);
-            return Ok(build_error_response(400, "Invalid request body".to_string()));
+            return Ok(build_error_response(
+                400,
+                "Invalid request body".to_string(),
+            ));
         }
     };
 

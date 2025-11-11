@@ -20,6 +20,7 @@ use ed25519_dalek::{Signature, Verifier, VerifyingKey, PUBLIC_KEY_LENGTH, SIGNAT
 use thiserror::Error;
 
 #[derive(Error, Debug)]
+#[allow(dead_code)]
 pub enum VerificationError {
     #[error("Missing signature header")]
     MissingSignature,
@@ -75,21 +76,16 @@ pub fn verify_discord_signature(
     }
 
     // Create the verifying key
-    let verifying_key = VerifyingKey::from_bytes(
-        public_key_bytes
-            .as_slice()
-            .try_into()
-            .map_err(|_| VerificationError::InvalidPublicKeyFormat("Failed to parse key".into()))?,
-    )
-    .map_err(|e| VerificationError::InvalidPublicKeyFormat(e.to_string()))?;
+    let verifying_key =
+        VerifyingKey::from_bytes(public_key_bytes.as_slice().try_into().map_err(|_| {
+            VerificationError::InvalidPublicKeyFormat("Failed to parse key".into())
+        })?)
+        .map_err(|e| VerificationError::InvalidPublicKeyFormat(e.to_string()))?;
 
     // Create the signature
-    let signature = Signature::from_bytes(
-        signature_bytes
-            .as_slice()
-            .try_into()
-            .map_err(|_| VerificationError::InvalidSignatureFormat("Failed to parse signature".into()))?,
-    );
+    let signature = Signature::from_bytes(signature_bytes.as_slice().try_into().map_err(|_| {
+        VerificationError::InvalidSignatureFormat("Failed to parse signature".into())
+    })?);
 
     // Construct the message (timestamp + body)
     let message = format!("{}{}", timestamp, body);
@@ -141,7 +137,7 @@ mod tests {
         let timestamp = "1234567890";
         let body = r#"{"type":1}"#;
 
-        let result = verify_discord_signature(&public_key, &signature, timestamp, body);
+        let result = verify_discord_signature(public_key, &signature, timestamp, body);
         assert!(matches!(
             result,
             Err(VerificationError::InvalidPublicKeyFormat(_))

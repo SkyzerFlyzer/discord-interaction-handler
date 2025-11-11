@@ -71,6 +71,7 @@ pub enum ComponentType {
 /// Button Styles
 #[derive(Debug, Clone, Copy, Deserialize, Serialize, PartialEq, Eq)]
 #[repr(u8)]
+#[allow(dead_code)]
 pub enum ButtonStyle {
     Primary = 1,
     Secondary = 2,
@@ -82,6 +83,7 @@ pub enum ButtonStyle {
 /// Text Input Styles
 #[derive(Debug, Clone, Copy, Deserialize, Serialize, PartialEq, Eq)]
 #[repr(u8)]
+#[allow(dead_code)]
 pub enum TextInputStyle {
     Short = 1,
     Paragraph = 2,
@@ -426,6 +428,7 @@ impl InteractionResponse {
     }
 
     /// Create a deferred response
+    #[allow(dead_code)]
     pub fn deferred() -> Self {
         Self {
             response_type: InteractionCallbackType::DeferredChannelMessageWithSource,
@@ -434,6 +437,7 @@ impl InteractionResponse {
     }
 
     /// Create a message response
+    #[allow(dead_code)]
     pub fn message(content: String) -> Self {
         Self {
             response_type: InteractionCallbackType::ChannelMessageWithSource,

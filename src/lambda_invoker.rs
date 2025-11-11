@@ -66,12 +66,8 @@ impl LambdaInvoker {
         interaction: &Interaction,
     ) -> Result<Value, LambdaInvokerError> {
         match interaction.interaction_type {
-            InteractionType::ApplicationCommand => {
-                self.invoke_command_lambda(interaction).await
-            }
-            InteractionType::MessageComponent => {
-                self.invoke_component_lambda(interaction).await
-            }
+            InteractionType::ApplicationCommand => self.invoke_command_lambda(interaction).await,
+            InteractionType::MessageComponent => self.invoke_component_lambda(interaction).await,
             InteractionType::ModalSubmit => self.invoke_modal_lambda(interaction).await,
             InteractionType::ApplicationCommandAutocomplete => {
                 self.invoke_autocomplete_lambda(interaction).await
@@ -206,9 +202,6 @@ impl LambdaInvoker {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::discord::InteractionData;
-
     #[test]
     fn test_extract_function_name_from_custom_id() {
         let custom_id = "my_button:arg1:arg2";
