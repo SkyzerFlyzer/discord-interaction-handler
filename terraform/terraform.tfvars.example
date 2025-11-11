@@ -1,0 +1,15 @@
+# Discord Interaction Handler Terraform Variables Example
+# Copy this file to terraform.tfvars and fill in your values
+
+aws_region         = "us-east-1"
+environment        = "prod"
+project_name       = "discord-interaction-handler"
+discord_public_key = "your_discord_public_key_here"
+
+# Optional overrides
+# lambda_timeout       = 30
+# lambda_memory_size   = 256
+# log_retention_days   = 7
+# rust_log_level       = "info"
+# enable_xray_tracing  = false
+# api_gateway_log_level = "INFO"

@@ -1,0 +1,8 @@
+# Cargo configuration for optimal Lambda builds
+
+[profile.release]
+# Additional release optimizations
+incremental = false
+
+# Note: Target architecture is handled by cargo-lambda
+# which automatically builds for AWS Lambda's runtime environment
