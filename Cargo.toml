@@ -13,19 +13,19 @@ lambda_http = "0.13"
 aws-config = { version = "1.5", features = ["behavior-version-latest"] }
 aws-sdk-lambda = "1.42"
 
-# Async runtime
-tokio = { version = "1.40", features = ["full"] }
+# Async runtime - Only include features needed for Lambda
+tokio = { version = "1.40", features = ["macros", "rt-multi-thread", "sync", "time"] }
 
 # Serialization
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"], default-features = false }
+serde_json = { version = "1.0", default-features = false, features = ["std"] }
 
 # HTTP
-reqwest = { version = "0.12", features = ["json"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 
 # Cryptography for Discord signature verification
-ed25519-dalek = { version = "2.1", features = ["rand_core"] }
-hex = "0.4"
+ed25519-dalek = { version = "2.1", features = ["rand_core"], default-features = false }
+hex = { version = "0.4", default-features = false, features = ["std"] }
 
 # Error handling
 thiserror = "1.0"
@@ -33,15 +33,20 @@ anyhow = "1.0"
 
 # Logging
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["env-filter", "std", "fmt", "ansi"] }
 
 [dev-dependencies]
 mockito = "1.5"
 tokio-test = "0.4"
 
 [profile.release]
-opt-level = "z"     # Optimize for size
-lto = true          # Enable Link Time Optimization
-codegen-units = 1   # Reduce number of codegen units to increase optimizations
-panic = "abort"     # Abort on panic
-strip = true        # Strip symbols from binary
+opt-level = "z"        # Optimize for size (Lambda cold start)
+lto = "fat"            # Full Link Time Optimization
+codegen-units = 1      # Maximize optimizations
+panic = "abort"        # Reduce binary size
+strip = "symbols"      # Strip debug symbols
+overflow-checks = false # Disable overflow checks in release
+
+[profile.dev]
+opt-level = 0
+debug = true
