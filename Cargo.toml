@@ -1,0 +1,47 @@
+[package]
+name = "discord-interaction-handler"
+version = "0.2.0"
+edition = "2021"
+authors = ["Joe McNally"]
+license = "GPL-3.0"
+description = "A Rust-based Discord Interaction Handler for AWS Lambda with full Discord API support"
+
+[dependencies]
+# AWS Lambda runtime
+lambda_runtime = "0.13"
+lambda_http = "0.13"
+aws-config = { version = "1.5", features = ["behavior-version-latest"] }
+aws-sdk-lambda = "1.42"
+
+# Async runtime
+tokio = { version = "1.40", features = ["full"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# HTTP
+reqwest = { version = "0.12", features = ["json"] }
+
+# Cryptography for Discord signature verification
+ed25519-dalek = { version = "2.1", features = ["rand_core"] }
+hex = "0.4"
+
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+mockito = "1.5"
+tokio-test = "0.4"
+
+[profile.release]
+opt-level = "z"     # Optimize for size
+lto = true          # Enable Link Time Optimization
+codegen-units = 1   # Reduce number of codegen units to increase optimizations
+panic = "abort"     # Abort on panic
+strip = true        # Strip symbols from binary
